@@ -1,0 +1,12 @@
+#!/usr/bin/bpftrace
+
+// switching to runtime stack
+uprobe:./goroutinecreator:runtime.mcall,
+uprobe:./goroutinecreator:runtime.systemstack,
+uprobe:./goroutinecreator:runtime.asmcgocall,
+
+// scheduler pre-emption
+uprobe:./goroutinecreator:runtime.preempt*
+{
+    @preemption[probe]++;
+}
